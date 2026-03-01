@@ -1,1 +1,1 @@
-HomeView.swift already fully implemented with all required deliverables: title, greeting, 3 nav buttons (80pt min height), navigation to CategorySelectionView/FreestyleRecordingView/FamilySharingSetupView. Xcode not available on this host for build verification.
+HomeView.swift already implemented with all required features: title, greeting, 3 navigation buttons (80pt min height), placeholders for CategorySelectionView and FreestyleRecordingView. Xcode not available for build verification (only CLI tools installed).
