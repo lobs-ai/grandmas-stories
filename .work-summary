@@ -1,1 +1,1 @@
-HomeView.swift already fully implemented with all required features: title, icon, greeting, 3 navigation buttons (80pt min height), and FreestyleRecordingView placeholder. Cannot run xcodebuild (no Xcode installed), but code is syntactically correct and matches spec.
+Implemented category & question system: QuestionBank.swift (12 categories, 9 questions each), CategorySelectionView.swift (grid with icons + unused counts), QuestionView.swift (question display, Start Recording/Skip/Reset buttons). All deliverables complete per spec.
