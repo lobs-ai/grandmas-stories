@@ -7,7 +7,7 @@ struct ContentView: View {
         if settingsStore.settings.hasCompletedSetup {
             HomeView()
         } else {
-            SetupView()
+            SetupContainerView()
         }
     }
 }
