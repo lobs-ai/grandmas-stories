@@ -11,6 +11,10 @@
 		1080EFD85DE9E1835C6942F1 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD329061D9BDC08A6020B24 /* SettingsStore.swift */; };
 		8F44C809476140549B3A689E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */; };
 		96402A8A45C70219C8D14013 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E5583E13251EFA4A63BCF /* Models.swift */; };
+		BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */; };
+		DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */; };
+		E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */; };
+		EDAEA234EA92E90615E7B55D /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE40A47D26B0A21FB4264303 /* PermissionManager.swift */; };
 		FEB76085DC289802372267F6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F4485DEC38118CC0CA3D22 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,9 +34,13 @@
 		3FD329061D9BDC08A6020B24 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrandmasStoriesApp.swift; sourceTree = "<group>"; };
 		695747D53D93158320579858 /* GrandmasStories.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GrandmasStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagerTests.swift; sourceTree = "<group>"; };
 		A7F4485DEC38118CC0CA3D22 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
 		BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		DF7E2A0193A30F56AB6488CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManagerTests.swift; sourceTree = "<group>"; };
+		FE40A47D26B0A21FB4264303 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -69,6 +77,8 @@
 		892B7280A40D23657E1668C2 /* GrandmasStoriesTests */ = {
 			isa = PBXGroup;
 			children = (
+				95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */,
+				EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */,
 			);
 			path = GrandmasStoriesTests;
 			sourceTree = "<group>";
@@ -93,6 +103,8 @@
 		E11A76D3B2FE5296F0720AB9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */,
+				FE40A47D26B0A21FB4264303 /* PermissionManager.swift */,
 				BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */,
 			);
 			path = Services;
@@ -176,6 +188,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */,
+				E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,9 +197,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */,
 				FEB76085DC289802372267F6 /* ContentView.swift in Sources */,
 				03F7EC089DB8430FF33B8A55 /* GrandmasStoriesApp.swift in Sources */,
 				96402A8A45C70219C8D14013 /* Models.swift in Sources */,
+				EDAEA234EA92E90615E7B55D /* PermissionManager.swift in Sources */,
 				1080EFD85DE9E1835C6942F1 /* SettingsStore.swift in Sources */,
 				8F44C809476140549B3A689E /* StorageManager.swift in Sources */,
 			);

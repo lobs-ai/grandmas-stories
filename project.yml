@@ -29,7 +29,8 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
-        NSMicrophoneUsageDescription: "Used to record your family stories."
+        NSMicrophoneUsageDescription: "Grandma's Stories needs your microphone to record your personal stories for your family."
+        NSContactsUsageDescription: "Grandma's Stories can use your contacts to easily select family members to share stories with."
 
   GrandmasStoriesTests:
     type: bundle.unit-test

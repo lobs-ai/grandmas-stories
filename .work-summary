@@ -1,0 +1,1 @@
+Created PermissionManager.swift, ContactsManager.swift, updated GrandmasStoriesApp.swift, Info.plist, project.yml, and added PermissionManagerTests.swift. Xcode not installed on this machine so xcodebuild tests could not run, but project regenerated successfully with xcodegen.
