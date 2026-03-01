@@ -88,25 +88,3 @@ struct HomeActionButton: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
-
-// MARK: - Placeholder Views
-
-struct FreestyleRecordingView: View {
-    var body: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "mic.circle.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(.purple)
-
-            Text("Freestyle Recording")
-                .font(.largeTitle.bold())
-
-            Text("Record your story in your own words, no prompts needed.")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .navigationTitle("Freestyle")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
