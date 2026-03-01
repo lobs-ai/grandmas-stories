@@ -22,8 +22,11 @@ final class AudioRecorderTests: XCTestCase {
         XCTAssertFalse(recorder.silenceDetected)
     }
 
+    func testInitialWasInterruptedFalse() {
+        XCTAssertFalse(recorder.wasInterrupted)
+    }
+
     func testCurrentAveragePowerWhenNotRecording() {
-        // Should return very low value when no recorder active
         let power = recorder.currentAveragePower()
         XCTAssertLessThanOrEqual(power, 0)
     }
@@ -31,5 +34,19 @@ final class AudioRecorderTests: XCTestCase {
     func testIsSilentWhenNotRecording() {
         // No recorder active → default power -160 → silence
         XCTAssertTrue(recorder.isSilent())
+    }
+
+    func testAvailableDiskSpaceBytes() {
+        let space = AudioRecorder.availableDiskSpaceBytes()
+        XCTAssertNotNil(space)
+        if let space = space {
+            XCTAssertGreaterThan(space, 0)
+        }
+    }
+
+    func testDiskSpaceCheckDoesNotCrash() {
+        // On a dev machine with space, isDiskSpaceLow() should return false
+        let isLow = AudioRecorder.isDiskSpaceLow()
+        XCTAssertFalse(isLow, "Dev machine should not be critically low on disk space")
     }
 }

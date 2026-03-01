@@ -10,6 +10,7 @@ final class AudioRecorder: NSObject, ObservableObject, AVAudioRecorderDelegate, 
     @Published var isPlaying = false
     @Published var recordingURL: URL?
     @Published var silenceDetected = false
+    @Published var wasInterrupted = false   // true if a phone call/etc stopped recording
 
     // MARK: - Private
 
@@ -17,6 +18,20 @@ final class AudioRecorder: NSObject, ObservableObject, AVAudioRecorderDelegate, 
     private var player: AVAudioPlayer?
     private var meterTimer: Timer?
     private let silenceThreshold: Float = -40.0 // dBFS
+    private var interruptionObserver: NSObjectProtocol?
+
+    // MARK: - Init / Deinit
+
+    override init() {
+        super.init()
+        observeAudioInterruptions()
+    }
+
+    deinit {
+        if let obs = interruptionObserver {
+            NotificationCenter.default.removeObserver(obs)
+        }
+    }
 
     // MARK: - Recording
 
@@ -39,6 +54,7 @@ final class AudioRecorder: NSObject, ObservableObject, AVAudioRecorderDelegate, 
 
         recordingURL = url
         isRecording = true
+        wasInterrupted = false
         silenceDetected = false
 
         meterTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
@@ -77,7 +93,6 @@ final class AudioRecorder: NSObject, ObservableObject, AVAudioRecorderDelegate, 
         _ = recorder.averagePower(forChannel: 0)
     }
 
-    /// Returns current average power in dBFS (call while recording).
     func currentAveragePower() -> Float {
         recorder?.updateMeters()
         return recorder?.averagePower(forChannel: 0) ?? -160
@@ -85,6 +100,56 @@ final class AudioRecorder: NSObject, ObservableObject, AVAudioRecorderDelegate, 
 
     func isSilent() -> Bool {
         currentAveragePower() < silenceThreshold
+    }
+
+    // MARK: - Interruption Handling
+
+    private func observeAudioInterruptions() {
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleInterruption(notification)
+        }
+    }
+
+    private func handleInterruption(_ notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
+        switch type {
+        case .began:
+            // A phone call or other interruption started — stop recording gracefully
+            if isRecording {
+                stopRecording()
+                wasInterrupted = true
+            }
+        case .ended:
+            // Interruption ended; we don't auto-resume — let the user decide
+            break
+        @unknown default:
+            break
+        }
+    }
+
+    // MARK: - Disk Space
+
+    /// Returns available disk space in bytes, or nil if unavailable.
+    static func availableDiskSpaceBytes() -> Int64? {
+        do {
+            let attrs = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory())
+            return attrs[.systemFreeSize] as? Int64
+        } catch {
+            return nil
+        }
+    }
+
+    /// Returns true if disk space is critically low (< 50 MB).
+    static func isDiskSpaceLow() -> Bool {
+        guard let free = availableDiskSpaceBytes() else { return false }
+        return free < 50 * 1024 * 1024
     }
 
     // MARK: - Delegates

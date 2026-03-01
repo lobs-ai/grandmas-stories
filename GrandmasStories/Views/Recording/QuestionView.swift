@@ -36,6 +36,7 @@ struct QuestionView: View {
                 questionContentView(question: question)
             } else {
                 ProgressView()
+                    .accessibilityLabel("Loading question")
             }
         }
         .navigationTitle(category.name)
@@ -51,12 +52,14 @@ struct QuestionView: View {
 
             Image(systemName: category.icon)
                 .font(.system(size: 48))
-                .foregroundStyle(.blue)
+                .foregroundStyle(AppColors.warmOrange)
+                .accessibilityHidden(true)
 
             Text(question)
                 .font(.title2.weight(.semibold))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
+                .accessibilityAddTraits(.isHeader)
 
             Spacer()
 
@@ -66,19 +69,23 @@ struct QuestionView: View {
                         .font(.title3.weight(.semibold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, minHeight: 56)
-                        .background(Color.blue.gradient)
+                        .background(AppColors.warmOrange.gradient)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Start recording your answer")
+                .accessibilityHint("Tap to begin recording a response to this question")
 
                 Button(action: skipQuestion) {
                     Label("Skip Question", systemImage: "forward.fill")
                         .font(.body.weight(.medium))
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(AppColors.warmOrange)
                         .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(Color.blue.opacity(0.1))
+                        .background(AppColors.warmOrange.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
+                .accessibilityLabel("Skip this question")
+                .accessibilityHint("Move to the next available question in this category")
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
@@ -91,6 +98,7 @@ struct QuestionView: View {
 
             Text("🎉")
                 .font(.system(size: 64))
+                .accessibilityLabel("Celebration emoji")
 
             Text("You've answered all questions in this category!")
                 .font(.title2.weight(.semibold))
@@ -110,11 +118,13 @@ struct QuestionView: View {
                     .font(.body.weight(.semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 52)
-                    .background(Color.orange.gradient)
+                    .background(AppColors.warmOrange.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
+            .accessibilityLabel("Reset all questions in this category")
+            .accessibilityHint("You will be able to record answers to all questions again")
         }
     }
 
@@ -145,22 +155,7 @@ struct QuestionView: View {
     }
 }
 
-// MARK: - RecordingView stub (placeholder if not yet created)
-
-// Only define if no other RecordingView exists in the module.
-// This avoids redeclaration errors. The real RecordingView should
-// accept (question:categoryId:) — update as needed.
-#if false
-struct RecordingView: View {
-    let question: String
-    let categoryId: String
-    var body: some View {
-        Text("Recording: \(question)")
-    }
-}
-#endif
-
-#Preview {
+#preview {
     NavigationStack {
         QuestionView(category: QuestionBank.categories[0])
     }
