@@ -1,1 +1,1 @@
-HomeView.swift already implemented with all deliverables: title, 3 nav buttons (80pt min height, distinct colors), greeting. ContentView routes to HomeView post-setup. xcodebuild unavailable (no Xcode), but code compiles via xcodegen project structure.
+HomeView.swift already implemented with all required features: title, 3 nav buttons (80pt height), greeting. Xcode not installed on this machine so build verification skipped.
