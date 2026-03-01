@@ -11,6 +11,7 @@ struct Recording: Codable, Identifiable {
     let createdAt: Date
     var duration: TimeInterval
     var fileSize: Int64
+    var sharedAt: Date?
 
     init(
         id: UUID = UUID(),
@@ -20,7 +21,8 @@ struct Recording: Codable, Identifiable {
         fileName: String,
         createdAt: Date = Date(),
         duration: TimeInterval = 0,
-        fileSize: Int64 = 0
+        fileSize: Int64 = 0,
+        sharedAt: Date? = nil
     ) {
         self.id = id
         self.title = title
@@ -30,6 +32,7 @@ struct Recording: Codable, Identifiable {
         self.createdAt = createdAt
         self.duration = duration
         self.fileSize = fileSize
+        self.sharedAt = sharedAt
     }
 }
 
@@ -54,7 +57,7 @@ struct Category: Codable, Identifiable {
 struct FamilyMember: Codable, Identifiable {
     let id: UUID
     var name: String
-    var phoneNumber: String?
+    var phoneNumber: String? 
     var contactIdentifier: String?
 
     init(

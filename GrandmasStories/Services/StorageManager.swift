@@ -113,4 +113,34 @@ final class StorageManager {
         let attrs = try? fileManager.attributesOfItem(atPath: url.path)
         return (attrs?[.size] as? Int64) ?? 0
     }
+
+    // MARK: - Recording Metadata
+
+    private enum RecordingKeys {
+        static let recordings = "recordings"
+    }
+
+    func loadRecordings() -> [Recording] {
+        guard let data = userDefaults.data(forKey: RecordingKeys.recordings),
+              let recordings = try? decoder.decode([Recording].self, from: data) else {
+            return []
+        }
+        return recordings
+    }
+
+    func saveRecording(_ recording: Recording) {
+        var recordings = loadRecordings()
+        if let idx = recordings.firstIndex(where: { $0.id == recording.id }) {
+            recordings[idx] = recording
+        } else {
+            recordings.append(recording)
+        }
+        guard let data = try? encoder.encode(recordings) else { return }
+        userDefaults.set(data, forKey: RecordingKeys.recordings)
+    }
+
+    func saveRecordings(_ recordings: [Recording]) {
+        guard let data = try? encoder.encode(recordings) else { return }
+        userDefaults.set(data, forKey: RecordingKeys.recordings)
+    }
 }

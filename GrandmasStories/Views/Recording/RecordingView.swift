@@ -1,4 +1,5 @@
 import SwiftUI
+import MessageUI
 
 /// The main recording screen. Receives an optional prompt question.
 struct RecordingView: View {
@@ -7,9 +8,18 @@ struct RecordingView: View {
 
     @StateObject private var audioRecorder = AudioRecorder()
     @StateObject private var storage = StorageManager()
+    @StateObject private var sharingService = SharingService()
+
     @State private var isRecording = false
     @State private var recordingFinished = false
+    @State private var savedRecording: Recording? = nil
+    @State private var savedAudioURL: URL? = nil
+    @State private var showSharingOptions = false
+
     @Environment(\.dismiss) private var dismiss
+
+    // Settings for family members / sharing method
+    private var settingsStore = SettingsStore()
 
     var body: some View {
         VStack(spacing: 32) {
@@ -62,13 +72,22 @@ struct RecordingView: View {
                     }
                     .padding(.horizontal, 24)
                 } else {
-                    Button(action: { dismiss() }) {
-                        Text("Done")
+                    // Share button
+                    Button(action: { showSharingOptions = true }) {
+                        Label("Share Story", systemImage: "square.and.arrow.up")
                             .font(.title3.weight(.semibold))
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, minHeight: 56)
-                            .background(Color.green.gradient)
+                            .background(Color.blue.gradient)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                    .padding(.horizontal, 24)
+
+                    Button(action: { dismiss() }) {
+                        Text("Done")
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .padding(.horizontal, 24)
                 }
@@ -77,7 +96,39 @@ struct RecordingView: View {
         }
         .navigationTitle("Record Your Story")
         .navigationBarTitleDisplayMode(.inline)
+        // Sharing options sheet
+        .confirmationDialog("Share via", isPresented: $showSharingOptions, titleVisibility: .visible) {
+            Button("iMessage") { triggerShare(method: .iMessage) }
+            Button("WhatsApp") { triggerShare(method: .whatsApp) }
+            Button("Cancel", role: .cancel) {}
+        }
+        // UIActivityViewController (WhatsApp / general)
+        .sheet(isPresented: $sharingService.showShareSheet) {
+            ShareSheet(items: sharingService.shareItems) {
+                markSharedAndDismiss()
+            }
+        }
+        // MFMessageComposeViewController (iMessage)
+        .sheet(isPresented: $sharingService.showMessageComposer) {
+            if let url = sharingService.messageAttachmentURL {
+                MessageComposer(
+                    recipients: sharingService.messageRecipients,
+                    body: sharingService.messageBody,
+                    attachmentURL: url
+                ) {
+                    markSharedAndDismiss()
+                }
+            }
+        }
+        // Error alerts
+        .alert(sharingService.alertTitle, isPresented: $sharingService.showAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(sharingService.alertMessage)
+        }
     }
+
+    // MARK: - Actions
 
     private func toggleRecording() {
         if isRecording {
@@ -89,8 +140,34 @@ struct RecordingView: View {
             let url = storage.audioFileURL(fileName: fileName)
             try? storage.ensureAudioDirectoryExists()
             try? audioRecorder.startRecording(to: url)
+
+            // Prepare a Recording model for later sharing
+            savedAudioURL = url
+            savedRecording = Recording(
+                title: question ?? "Story",
+                categoryId: categoryId,
+                questionText: question,
+                fileName: fileName
+            )
             isRecording = true
         }
+    }
+
+    private func triggerShare(method: SharingMethod) {
+        guard let recording = savedRecording, let url = savedAudioURL else { return }
+        let members = settingsStore.settings.familyMembers
+        sharingService.shareRecording(recording, via: method, to: members, audioURL: url) {
+            markSharedAndDismiss()
+        }
+    }
+
+    private func markSharedAndDismiss() {
+        // Persist sharedAt on the recording
+        if var rec = savedRecording {
+            rec.sharedAt = Date()
+            storage.saveRecording(rec)
+        }
+        dismiss()
     }
 }
 

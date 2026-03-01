@@ -171,3 +171,67 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(decoded.questionIndex, 7)
     }
 }
+
+// MARK: - Recording Persistence Tests
+
+final class RecordingPersistenceTests: XCTestCase {
+
+    var storage: StorageManager!
+    var defaults: UserDefaults!
+
+    override func setUp() {
+        defaults = UserDefaults(suiteName: "rec-test-\(UUID().uuidString)")!
+        storage = StorageManager(userDefaults: defaults, fileManager: .default)
+    }
+
+    override func tearDown() {
+        defaults.removePersistentDomain(forName: defaults.volatileDomainNames.first ?? "")
+    }
+
+    func testDefaultRecordingsEmpty() {
+        XCTAssertTrue(storage.loadRecordings().isEmpty)
+    }
+
+    func testSaveNewRecording() {
+        let rec = Recording(title: "My Story", fileName: "story.m4a")
+        storage.saveRecording(rec)
+        let loaded = storage.loadRecordings()
+        XCTAssertEqual(loaded.count, 1)
+        XCTAssertEqual(loaded[0].title, "My Story")
+        XCTAssertNil(loaded[0].sharedAt)
+    }
+
+    func testUpdateExistingRecordingSharedAt() {
+        var rec = Recording(title: "My Story", fileName: "story.m4a")
+        storage.saveRecording(rec)
+
+        let sharedDate = Date()
+        rec.sharedAt = sharedDate
+        storage.saveRecording(rec)
+
+        let loaded = storage.loadRecordings()
+        XCTAssertEqual(loaded.count, 1)
+        XCTAssertNotNil(loaded[0].sharedAt)
+    }
+
+    func testSaveMultipleRecordings() {
+        let rec1 = Recording(title: "Story 1", fileName: "s1.m4a")
+        let rec2 = Recording(title: "Story 2", fileName: "s2.m4a")
+        storage.saveRecording(rec1)
+        storage.saveRecording(rec2)
+        XCTAssertEqual(storage.loadRecordings().count, 2)
+    }
+
+    func testRecordingSharedAtCodable() throws {
+        var rec = Recording(title: "Coded Story", fileName: "coded.m4a")
+        rec.sharedAt = Date(timeIntervalSince1970: 1000)
+        let data = try JSONEncoder().encode(rec)
+        let decoded = try JSONDecoder().decode(Recording.self, from: data)
+        XCTAssertEqual(decoded.sharedAt?.timeIntervalSince1970 ?? 0, 1000, accuracy: 1)
+    }
+
+    func testRecordingSharedAtNilByDefault() {
+        let rec = Recording(title: "No Share", fileName: "noshare.m4a")
+        XCTAssertNil(rec.sharedAt)
+    }
+}
