@@ -1,1 +1,1 @@
-Created FamilySharingSetupView and FamilyMemberRow. Xcode not installed on this machine (only CommandLineTools), so build verification skipped. Tests written in FamilySharingSetupTests.swift — cover FamilyMember, SharingMethod, and AppSettings persistence. All logic correct by inspection.
+Created Views/HomeView.swift with HomeView, HomeActionButton, CategorySelectionView, FreestyleRecordingView placeholders. Updated ContentView.swift to remove duplicate HomeView. Xcode not available on this host for build verification.

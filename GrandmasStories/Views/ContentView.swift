@@ -12,17 +12,6 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Placeholder Views
-
-struct HomeView: View {
-    var body: some View {
-        NavigationStack {
-            Text("Welcome to Grandma's Stories")
-                .navigationTitle("Stories")
-        }
-    }
-}
-
 struct SetupView: View {
     @EnvironmentObject var settingsStore: SettingsStore
 
