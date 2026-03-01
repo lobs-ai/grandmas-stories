@@ -9,9 +9,12 @@
 /* Begin PBXBuildFile section */
 		03F7EC089DB8430FF33B8A55 /* GrandmasStoriesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */; };
 		1080EFD85DE9E1835C6942F1 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD329061D9BDC08A6020B24 /* SettingsStore.swift */; };
+		2C80F201C6D7B0BCCCF500D5 /* AudioRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611EF72EE922F98F618704C /* AudioRecorderTests.swift */; };
+		501276E2BDD83D2AC745CC46 /* FamilyMemberRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */; };
 		6033F16C5D446E1C67350374 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6723C5B76AC29B7967A2C4 /* AudioRecorder.swift */; };
 		7974817F2D4C1290C6F6ECC7 /* SetupContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC3FB07533E9DD366E55DED /* SetupContainerView.swift */; };
 		8F44C809476140549B3A689E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */; };
+		901DD4D8CC506B4D1A32D6BD /* FamilySharingSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */; };
 		96402A8A45C70219C8D14013 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E5583E13251EFA4A63BCF /* Models.swift */; };
 		9CE269508013E9920AA65239 /* RecordingTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620211F7057DBAB84C4D4508 /* RecordingTestView.swift */; };
 		BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */; };
@@ -38,11 +41,14 @@
 		4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrandmasStoriesApp.swift; sourceTree = "<group>"; };
 		620211F7057DBAB84C4D4508 /* RecordingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingTestView.swift; sourceTree = "<group>"; };
 		695747D53D93158320579858 /* GrandmasStories.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GrandmasStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySharingSetupView.swift; sourceTree = "<group>"; };
+		8611EF72EE922F98F618704C /* AudioRecorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderTests.swift; sourceTree = "<group>"; };
 		95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagerTests.swift; sourceTree = "<group>"; };
 		9BC3FB07533E9DD366E55DED /* SetupContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupContainerView.swift; sourceTree = "<group>"; };
 		A7F4485DEC38118CC0CA3D22 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
 		BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyMemberRow.swift; sourceTree = "<group>"; };
 		CE6723C5B76AC29B7967A2C4 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		DF7E2A0193A30F56AB6488CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManagerTests.swift; sourceTree = "<group>"; };
@@ -64,6 +70,7 @@
 			children = (
 				A7F4485DEC38118CC0CA3D22 /* ContentView.swift */,
 				3FD329061D9BDC08A6020B24 /* SettingsStore.swift */,
+				EA217961B3FA8D643D95C20D /* Components */,
 				42B126E2368B4FEC13667CC4 /* Setup */,
 			);
 			path = Views;
@@ -84,6 +91,7 @@
 		42B126E2368B4FEC13667CC4 /* Setup */ = {
 			isa = PBXGroup;
 			children = (
+				69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */,
 				620211F7057DBAB84C4D4508 /* RecordingTestView.swift */,
 				9BC3FB07533E9DD366E55DED /* SetupContainerView.swift */,
 			);
@@ -93,6 +101,7 @@
 		892B7280A40D23657E1668C2 /* GrandmasStoriesTests */ = {
 			isa = PBXGroup;
 			children = (
+				8611EF72EE922F98F618704C /* AudioRecorderTests.swift */,
 				95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */,
 				EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */,
 			);
@@ -125,6 +134,14 @@
 				BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		EA217961B3FA8D643D95C20D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C80F201C6D7B0BCCCF500D5 /* AudioRecorderTests.swift in Sources */,
 				BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */,
 				E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */,
 			);
@@ -217,6 +235,8 @@
 				6033F16C5D446E1C67350374 /* AudioRecorder.swift in Sources */,
 				DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */,
 				FEB76085DC289802372267F6 /* ContentView.swift in Sources */,
+				501276E2BDD83D2AC745CC46 /* FamilyMemberRow.swift in Sources */,
+				901DD4D8CC506B4D1A32D6BD /* FamilySharingSetupView.swift in Sources */,
 				03F7EC089DB8430FF33B8A55 /* GrandmasStoriesApp.swift in Sources */,
 				96402A8A45C70219C8D14013 /* Models.swift in Sources */,
 				EDAEA234EA92E90615E7B55D /* PermissionManager.swift in Sources */,

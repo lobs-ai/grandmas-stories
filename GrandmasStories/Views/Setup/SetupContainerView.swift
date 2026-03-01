@@ -6,7 +6,7 @@ struct SetupContainerView: View {
 
     @State private var currentStep: Int = 0
 
-    private let totalSteps = 3
+    private let totalSteps = 2
 
     var body: some View {
         NavigationStack {
@@ -44,30 +44,15 @@ struct SetupContainerView: View {
         switch currentStep {
         case 0:
             RecordingTestView(onContinue: advance)
-        case 1:
-            // Placeholder for future step 2 (e.g., profile setup)
-            placeholderStep(
-                icon: "person.circle.fill",
-                title: "Tell us about yourself",
-                subtitle: "We'll personalize your experience.",
-                buttonTitle: "Next"
-            )
         default:
-            // Final step — complete setup
-            placeholderStep(
-                icon: "checkmark.circle.fill",
-                title: "You're all set!",
-                subtitle: "Start recording your first story.",
-                buttonTitle: "Get Started"
-            )
+            FamilySharingSetupView(onFinish: completeSetup)
         }
     }
 
     private var stepTitle: String {
         switch currentStep {
         case 0: return "Microphone Test"
-        case 1: return "Your Profile"
-        default: return "Ready!"
+        default: return "Family & Sharing"
         }
     }
 
@@ -87,47 +72,5 @@ struct SetupContainerView: View {
         var updated = settingsStore.settings
         updated.hasCompletedSetup = true
         settingsStore.save(updated)
-    }
-
-    // MARK: - Placeholder Step
-
-    private func placeholderStep(
-        icon: String,
-        title: String,
-        subtitle: String,
-        buttonTitle: String
-    ) -> some View {
-        VStack(spacing: 32) {
-            Spacer()
-
-            Image(systemName: icon)
-                .font(.system(size: 80))
-                .foregroundStyle(.purple)
-
-            VStack(spacing: 12) {
-                Text(title)
-                    .font(.system(size: 28, weight: .bold))
-                    .multilineTextAlignment(.center)
-
-                Text(subtitle)
-                    .font(.system(size: 20))
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            Spacer()
-
-            Button(action: advance) {
-                Text(buttonTitle)
-                    .font(.system(size: 22, weight: .semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(.purple)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .padding(.horizontal, 24)
-            .padding(.bottom, 32)
-        }
     }
 }
