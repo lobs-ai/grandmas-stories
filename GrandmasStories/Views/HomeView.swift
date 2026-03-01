@@ -91,26 +91,6 @@ struct HomeActionButton: View {
 
 // MARK: - Placeholder Views
 
-struct CategorySelectionView: View {
-    var body: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "bubble.left.and.text.bubble.right")
-                .font(.system(size: 60))
-                .foregroundStyle(.blue)
-
-            Text("Choose a Category")
-                .font(.largeTitle.bold())
-
-            Text("Select a question category to guide your story.")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .navigationTitle("Record with Question")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
 struct FreestyleRecordingView: View {
     var body: some View {
         VStack(spacing: 24) {

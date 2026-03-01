@@ -10,9 +10,13 @@
 		03F7EC089DB8430FF33B8A55 /* GrandmasStoriesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */; };
 		1080EFD85DE9E1835C6942F1 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD329061D9BDC08A6020B24 /* SettingsStore.swift */; };
 		2C80F201C6D7B0BCCCF500D5 /* AudioRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611EF72EE922F98F618704C /* AudioRecorderTests.swift */; };
+		3A1FAEDF58F81ACBD066B89A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A0FAB0F75CB89C3C618042 /* CategorySelectionView.swift */; };
 		501276E2BDD83D2AC745CC46 /* FamilyMemberRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */; };
 		6033F16C5D446E1C67350374 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6723C5B76AC29B7967A2C4 /* AudioRecorder.swift */; };
+		665860F948C58C12F5C596B9 /* QuestionBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B5BF9063F9ED8D9BB03D8 /* QuestionBank.swift */; };
+		70DD9A646AE5C604510981C1 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0506B07C9E97E7AC8710AFF0 /* RecordingView.swift */; };
 		7974817F2D4C1290C6F6ECC7 /* SetupContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC3FB07533E9DD366E55DED /* SetupContainerView.swift */; };
+		7C4F7190216BEA3EE793A0F7 /* FamilySharingSetupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E2D5EE6024296CF11F6A2 /* FamilySharingSetupTests.swift */; };
 		8F44C809476140549B3A689E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */; };
 		901DD4D8CC506B4D1A32D6BD /* FamilySharingSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */; };
 		96402A8A45C70219C8D14013 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E5583E13251EFA4A63BCF /* Models.swift */; };
@@ -20,7 +24,9 @@
 		BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */; };
 		DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */; };
 		E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */; };
+		E90633A0AC1D0619AB44F5AE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43576E45198EE6BD8741E2CC /* HomeView.swift */; };
 		EDAEA234EA92E90615E7B55D /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE40A47D26B0A21FB4264303 /* PermissionManager.swift */; };
+		FCB0B5C4CB656FF87F72E78F /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160DBCAF63DCE869EEAE384C /* QuestionView.swift */; };
 		FEB76085DC289802372267F6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F4485DEC38118CC0CA3D22 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,13 +41,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0506B07C9E97E7AC8710AFF0 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		160DBCAF63DCE869EEAE384C /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
 		295989A177C376087021BF1B /* GrandmasStoriesTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrandmasStoriesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E5E5583E13251EFA4A63BCF /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		3FD329061D9BDC08A6020B24 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		433B5BF9063F9ED8D9BB03D8 /* QuestionBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionBank.swift; sourceTree = "<group>"; };
+		43576E45198EE6BD8741E2CC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrandmasStoriesApp.swift; sourceTree = "<group>"; };
 		620211F7057DBAB84C4D4508 /* RecordingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingTestView.swift; sourceTree = "<group>"; };
 		695747D53D93158320579858 /* GrandmasStories.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GrandmasStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySharingSetupView.swift; sourceTree = "<group>"; };
+		7E3E2D5EE6024296CF11F6A2 /* FamilySharingSetupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySharingSetupTests.swift; sourceTree = "<group>"; };
 		8611EF72EE922F98F618704C /* AudioRecorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderTests.swift; sourceTree = "<group>"; };
 		95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagerTests.swift; sourceTree = "<group>"; };
 		9BC3FB07533E9DD366E55DED /* SetupContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupContainerView.swift; sourceTree = "<group>"; };
@@ -50,6 +61,7 @@
 		BA15CAC1A7DBB82DA93EEA51 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyMemberRow.swift; sourceTree = "<group>"; };
 		CE6723C5B76AC29B7967A2C4 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		D9A0FAB0F75CB89C3C618042 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		DF7E2A0193A30F56AB6488CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManagerTests.swift; sourceTree = "<group>"; };
 		FE40A47D26B0A21FB4264303 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
@@ -69,8 +81,10 @@
 			isa = PBXGroup;
 			children = (
 				A7F4485DEC38118CC0CA3D22 /* ContentView.swift */,
+				43576E45198EE6BD8741E2CC /* HomeView.swift */,
 				3FD329061D9BDC08A6020B24 /* SettingsStore.swift */,
 				EA217961B3FA8D643D95C20D /* Components */,
+				F05A0B81C49CF0AEC7B76976 /* Recording */,
 				42B126E2368B4FEC13667CC4 /* Setup */,
 			);
 			path = Views;
@@ -81,6 +95,7 @@
 			children = (
 				4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */,
 				DF7E2A0193A30F56AB6488CD /* Info.plist */,
+				9F5807E2866AADD1D86BF971 /* Data */,
 				C7F50B5265A428412DE4C86B /* Models */,
 				E11A76D3B2FE5296F0720AB9 /* Services */,
 				05B28212C02B9E0C7177BD4A /* Views */,
@@ -102,10 +117,19 @@
 			isa = PBXGroup;
 			children = (
 				8611EF72EE922F98F618704C /* AudioRecorderTests.swift */,
+				7E3E2D5EE6024296CF11F6A2 /* FamilySharingSetupTests.swift */,
 				95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */,
 				EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */,
 			);
 			path = GrandmasStoriesTests;
+			sourceTree = "<group>";
+		};
+		9F5807E2866AADD1D86BF971 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				433B5BF9063F9ED8D9BB03D8 /* QuestionBank.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		B387B68A9C64F53C2E8B076C = {
@@ -142,6 +166,16 @@
 				C1DB468B6D422A0417DD8139 /* FamilyMemberRow.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		F05A0B81C49CF0AEC7B76976 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				D9A0FAB0F75CB89C3C618042 /* CategorySelectionView.swift */,
+				160DBCAF63DCE869EEAE384C /* QuestionView.swift */,
+				0506B07C9E97E7AC8710AFF0 /* RecordingView.swift */,
+			);
+			path = Recording;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C80F201C6D7B0BCCCF500D5 /* AudioRecorderTests.swift in Sources */,
+				7C4F7190216BEA3EE793A0F7 /* FamilySharingSetupTests.swift in Sources */,
 				BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */,
 				E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */,
 			);
@@ -233,14 +268,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				6033F16C5D446E1C67350374 /* AudioRecorder.swift in Sources */,
+				3A1FAEDF58F81ACBD066B89A /* CategorySelectionView.swift in Sources */,
 				DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */,
 				FEB76085DC289802372267F6 /* ContentView.swift in Sources */,
 				501276E2BDD83D2AC745CC46 /* FamilyMemberRow.swift in Sources */,
 				901DD4D8CC506B4D1A32D6BD /* FamilySharingSetupView.swift in Sources */,
 				03F7EC089DB8430FF33B8A55 /* GrandmasStoriesApp.swift in Sources */,
+				E90633A0AC1D0619AB44F5AE /* HomeView.swift in Sources */,
 				96402A8A45C70219C8D14013 /* Models.swift in Sources */,
 				EDAEA234EA92E90615E7B55D /* PermissionManager.swift in Sources */,
+				665860F948C58C12F5C596B9 /* QuestionBank.swift in Sources */,
+				FCB0B5C4CB656FF87F72E78F /* QuestionView.swift in Sources */,
 				9CE269508013E9920AA65239 /* RecordingTestView.swift in Sources */,
+				70DD9A646AE5C604510981C1 /* RecordingView.swift in Sources */,
 				1080EFD85DE9E1835C6942F1 /* SettingsStore.swift in Sources */,
 				7974817F2D4C1290C6F6ECC7 /* SetupContainerView.swift in Sources */,
 				8F44C809476140549B3A689E /* StorageManager.swift in Sources */,
