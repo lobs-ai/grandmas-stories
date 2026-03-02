@@ -1,107 +1,128 @@
-# GrandmasStories — Quality Review Pass
-_Reviewer: reviewer agent | Task EBC85773_
-
----
-
-## Build / TestFlight Readiness: ⚠️ NOT ready for TestFlight
-
-### Blocking TestFlight Issues
-1. `DEVELOPMENT_TEAM: ""` in `project.yml` — must be set before archiving
-2. **No Privacy Manifest** (`PrivacyInfo.xcprivacy`) — required by Apple since May 2024 for apps using microphone and contacts APIs. Submission will be rejected without it.
-3. **No app icon** — no `AppIcon` asset catalog found. TestFlight / App Store requires all icon sizes.
-4. **iCloud backup setting is a dead stub** — `iCloudBackupEnabled` exists in `AppSettings` but there are no iCloud entitlements, no implementation. Users will toggle it and nothing will happen.
-
----
-
-## 🔴 Critical Issues
-
-### 1. `settingsStore` is a plain `var`, not `@StateObject` — in two views
-**Files:** `RecordingView.swift:17`, `FreestyleRecordingView.swift:17`
-
-```swift
-private var settingsStore = SettingsStore()
-```
-
-SwiftUI re-creates `SettingsStore` (re-reads UserDefaults) on every re-render and won't observe changes. Fix: `@StateObject private var settingsStore = SettingsStore()` or inject from environment.
-
-### 2. Freestyle recording: file name collision causes silent data loss
-**File:** `FreestyleRecordingView.swift` — `saveRecording()`
-
-If two stories get the same sanitized name, `FileManager.moveItem(at:to:)` throws (destination exists). The catch shows a save-failed alert, but the recorded audio in the temp file is stranded. Fix: append a UUID suffix to the destination filename.
-
-### 3. Recording duration is always 0
-Both recording flows save `Recording` with `duration: 0`. There is no elapsed-time measurement or `AVAudioRecorder` duration read. Every saved recording shows 0s duration — will be visibly broken once a recordings-list UI exists.
-
----
-
-## 🟡 Important Issues
-
-### 4. `silenceDetected` published property is never updated — feature is dead
-**File:** `AudioRecorder.swift` — `checkMeters()`
-
-```swift
-_ = recorder.averagePower(forChannel: 0)   // discarded
-```
-
-The meter timer fires every 0.1s but discards the value. `silenceDetected` is never set to `true`. Either implement the detection or remove the dead code.
-
-### 5. WhatsApp fallback shows alert AND share sheet simultaneously
-**File:** `SharingService.swift` — `shareViaWhatsApp()`
-
-When WhatsApp is not installed, both `showShareSheet = true` and `showAlert = true` are set immediately. SwiftUI may present both at once. Show only the share sheet first.
-
-### 6. Redundant/inconsistent permission check logic
-**File:** `RecordingView.swift` — `toggleRecording()`
-
-Two separate checks (`currentMicrophoneStatus()` and `microphoneGranted`) can diverge if `PermissionManager` was freshly created. Consolidate to one authoritative check.
-
-### 7. `[0]` subscript on `urls(for:in:)` result
-**File:** `StorageManager.swift`
-
-```swift
-fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-```
-
-Will crash if the array is empty (won't happen in practice, but poor form). Use `first!` with a comment or guard-unwrap.
-
-### 8. No tests for `SharingService` or any View behavior
-Core sharing logic (iMessage vs WhatsApp, no recipients, WhatsApp not installed) has zero test coverage. This is the most important gap — it's the primary user-facing feature path.
-
----
-
-## 🔵 Suggestions
-
-### 9. Temp file leaked on freestyle naming dialog cancel
-If user cancels the naming dialog, the temp `.m4a` file is not deleted. Add cleanup on cancel.
-
-### 10. Hardcoded color in `HomeView` bypasses `AppColors`
-```swift
-color: Color(red: 0.3, green: 0.65, blue: 0.4)  // HomeView.swift:45
-```
-Should use `AppColors.freestyleAccent` for consistency.
-
-### 11. No recordings history screen
-`StorageManager` persists recordings, but there's no way to browse past recordings from the UI. The duration=0 bug will be obvious once this is built.
-
----
-
-## What's Done Well ✅
-
-- VoiceOver labels and hints are thorough and well-written throughout
-- Interruption handling (phone calls) is properly wired up
-- Error handling for disk space, permissions, and save failures is present
-- `StorageManager` is injectable — tests are properly isolated
-- `AudioRecorder` correctly removes its notification observer in `deinit`
-- Unit tests for storage and models are solid
+# GrandmasStories — Quality Review
+**Reviewer:** reviewer-agent  
+**Date:** 2025-07-14  
+**Scope:** Full codebase pass — correctness, Swift best practices, crashes, memory, TestFlight readiness
 
 ---
 
 ## Summary
 
-| Severity | Count |
-|---|---|
-| 🔴 Critical | 3 |
-| 🟡 Important | 5 |
-| 🔵 Suggestion | 3 |
+Good bones. The app is well-structured, accessibility coverage is solid, and the service layer is cleanly separated. Test coverage exists for the data layer. Found 2 critical bugs, 4 important issues, and a cluster of TestFlight blockers. Needs fixes before shipping to TestFlight.
 
-**Not TestFlight ready.** Blocking: missing Privacy Manifest, no app icon, blank development team, and the `@StateObject` bug. Fix criticals and TestFlight blockers before distributing.
+---
+
+## 🔴 Critical
+
+### 1. `RecordingView` and `FreestyleRecordingView` create orphaned `SettingsStore` instances
+
+**Files:** `Views/Recording/RecordingView.swift:30`, `Views/Recording/FreestyleRecordingView.swift:20`
+
+Both views declare:
+```swift
+private var settingsStore = SettingsStore()
+```
+
+This creates a *brand-new* `SettingsStore` on every view instantiation, completely disconnected from the `@EnvironmentObject` instance in `GrandmasStoriesApp`. The consequence: if the user has family members configured via `SetupFlow` or `FamilySharingSetupView`, those members won't be visible when `triggerShare()` is called — `members` will always be empty, and sharing will silently send to nobody.
+
+**Fix:** Change to `@EnvironmentObject private var settingsStore: SettingsStore` in both views.
+
+---
+
+### 2. `MessageComposer` loads audio file synchronously on the main thread
+
+**File:** `Views/Components/MessageComposer.swift:22`
+
+```swift
+if let data = try? Data(contentsOf: url) {
+```
+
+`Data(contentsOf:)` is a synchronous blocking read. Audio files can be several MB. Called inside `makeUIViewController(context:)`, which runs on the main thread — this will freeze the UI for a noticeable duration on older devices.
+
+**Fix:** Load audio data asynchronously before presenting the sheet, then pass the `Data` as a parameter to `MessageComposer`.
+
+---
+
+## 🟡 Important
+
+### 3. `silenceDetected` is published but never set — dead code in `checkMeters()`
+
+**File:** `Services/AudioRecorder.swift:61`
+
+```swift
+private func checkMeters() {
+    guard let recorder else { return }
+    recorder.updateMeters()
+    _ = recorder.averagePower(forChannel: 0)   // result discarded
+}
+```
+
+The meter timer fires every 0.1s but discards the reading. `silenceDetected` is `@Published` but observed nowhere. If silence detection is intentionally deferred, remove the dead code; if it's supposed to work, it's broken.
+
+---
+
+### 4. `FreestyleRecordingView.saveRecording()` can silently fail on filename collision
+
+Two stories sanitized to the same name → `FileManager.moveItem` throws → recording lost with a generic error.
+
+**Fix:** Append UUID/timestamp to `fileName`, same as `RecordingView` does.
+
+---
+
+### 5. `SharingService.shareViaWhatsApp` triggers alert + sheet simultaneously
+
+When WhatsApp is not installed, both `showShareSheet = true` and `presentAlert(...)` are called in the same turn. Two competing presentation modifiers = undefined behavior (alert silently dropped or both overlap).
+
+**Fix:** Show only the share sheet (self-explanatory), or only the alert with a button to open the sheet.
+
+---
+
+### 6. Permission check sends redundant async request when already `.denied`
+
+In both recording views, `status == .denied` takes the same async path as `.undetermined`, which calls `requestRecordPermission()` (which silently returns `false`) before showing the alert. It works but is misleading.
+
+**Fix:** Split: request permission on `.undetermined`, show denied alert immediately on `.denied`.
+
+---
+
+## 🔵 TestFlight / App Store Readiness
+
+### 7. `DEVELOPMENT_TEAM = ""` — build won't codesign
+
+Set to your Apple Developer team ID before archiving.
+
+### 8. App Icon not confirmed present
+
+`Info.plist` references `LaunchIcon` but no `.xcassets` AppIcon set was visible. App Store requires 1024×1024. Verify `Assets.xcassets` contains all required icon sizes.
+
+### 9. `iCloudBackupEnabled` flag has no implementation
+
+The flag is persisted and presumably shown in UI, but there's no CloudKit/iCloud entitlement or code. It's misleading. Remove from UI or mark "Coming Soon" until implemented.
+
+### 10. No Privacy Policy URL
+
+Required for App Store submission (microphone + contacts usage). Will get rejected without it. Add a privacy policy URL in App Store Connect before submitting.
+
+### 11. `SetupView` in `ContentView.swift` is dead code
+
+Never instantiated — `SetupContainerView` is used instead. Safe to delete.
+
+---
+
+## ✅ What's Good
+
+- **Accessibility:** Comprehensive `accessibilityLabel`/`accessibilityHint` coverage, `accessibilityLiveRegion` on status text, 44pt minimum tap targets. Better than most shipping apps.
+- **Error handling:** Disk space check, interruption handling with alert, permission denial with Settings deep-link — all correct.
+- **Test coverage:** Services layer has solid unit tests with isolated `UserDefaults` suites. Codable round-trips and edge cases covered.
+- **Audio session management:** Correct category/mode, interruption observer with weak self, deinit cleanup — no retain cycles.
+- **StorageManager:** Dependency-injected, genuinely testable. Good pattern.
+
+---
+
+## Priority Fix Order
+
+1. 🔴 Fix orphaned `SettingsStore` — sharing is broken
+2. 🔴 Async audio load in `MessageComposer` — main thread freeze
+3. 🟡 Filename collision in freestyle save
+4. 🟡 WhatsApp double-modal
+5. 🔵 Dev team + App Icon for TestFlight
+6. 🟡 Dead silence detection code
