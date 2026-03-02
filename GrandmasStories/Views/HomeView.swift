@@ -50,7 +50,7 @@ struct HomeView: View {
                         .accessibilityLabel("Record a freestyle story")
                         .accessibilityHint("Record any story you want, without a question prompt")
 
-                        NavigationLink(destination: FamilySharingSetupView()) {
+                        NavigationLink(destination: FamilySharingSetupView(onFinish: {})) {
                             HomeActionButton(
                                 title: "Update Family",
                                 icon: "person.2.circle",

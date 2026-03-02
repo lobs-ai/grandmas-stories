@@ -26,6 +26,7 @@
 		9C7DDAD06288A211CB6EE892 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446BEBD463C5CF129CE671F4 /* ShareSheet.swift */; };
 		9CE269508013E9920AA65239 /* RecordingTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620211F7057DBAB84C4D4508 /* RecordingTestView.swift */; };
 		B1BF82CCF16A56AE5A305F40 /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AD7E22F12F11B04C9D0FCF /* SharingService.swift */; };
+		B229BE12107A7D762C0AA63E /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF8BA3298FCA630BECF44F /* AppColors.swift */; };
 		BC87D4B9421A975507B8CEF6 /* PermissionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C308F7D5361B5E9236A4C3 /* PermissionManagerTests.swift */; };
 		C31E4817F3417D84BFDDB95F /* FreestyleRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901F6DBBF1D3CBB11E188B2E /* FreestyleRecordingView.swift */; };
 		DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E948227FC82513D4DA7BB3 /* ContactsManager.swift */; };
@@ -77,6 +78,7 @@
 		EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManagerTests.swift; sourceTree = "<group>"; };
 		ED15CE6385C24C52C309DB14 /* QuestionBankTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionBankTests.swift; sourceTree = "<group>"; };
 		FE40A47D26B0A21FB4264303 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		FFBF8BA3298FCA630BECF44F /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -92,6 +94,7 @@
 		05B28212C02B9E0C7177BD4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FFBF8BA3298FCA630BECF44F /* AppColors.swift */,
 				A7F4485DEC38118CC0CA3D22 /* ContentView.swift */,
 				43576E45198EE6BD8741E2CC /* HomeView.swift */,
 				3FD329061D9BDC08A6020B24 /* SettingsStore.swift */,
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B229BE12107A7D762C0AA63E /* AppColors.swift in Sources */,
 				6033F16C5D446E1C67350374 /* AudioRecorder.swift in Sources */,
 				3A1FAEDF58F81ACBD066B89A /* CategorySelectionView.swift in Sources */,
 				DB4C61634723EB7F0B7766F1 /* ContactsManager.swift in Sources */,

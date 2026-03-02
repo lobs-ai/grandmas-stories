@@ -29,7 +29,7 @@ final class PermissionManager: ObservableObject {
 
     /// Requests microphone permission. Updates `microphoneGranted` on the main actor.
     func requestMicrophonePermission() async {
-        let granted = await AVAudioSession.sharedInstance().requestRecordPermission()
+        let granted = await AVAudioApplication.requestRecordPermission()
         await MainActor.run {
             self.microphoneGranted = granted
         }

@@ -155,7 +155,7 @@ struct QuestionView: View {
     }
 }
 
-#preview {
+#Preview {
     NavigationStack {
         QuestionView(category: QuestionBank.categories[0])
     }

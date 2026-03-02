@@ -1,7 +1,7 @@
 import Foundation
 
 /// Handles all persistence: settings, used questions, and audio files.
-final class StorageManager {
+final class StorageManager: ObservableObject {
 
     // MARK: - Keys
 
