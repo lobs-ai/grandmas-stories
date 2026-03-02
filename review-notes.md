@@ -1,151 +1,105 @@
-# Code Review: Grandma's Stories
+# Code Review — Grandma's Stories
+**Date:** 2025-07-18  
 **Reviewer:** Reviewer Agent  
-**Date:** 2025-07-13  
-**Scope:** Full quality pass — correctness, Swift practices, crashes, memory leaks, TestFlight readiness
+**Scope:** Full quality pass — correctness, Swift best practices, crashes, memory leaks, TestFlight readiness
 
 ---
 
 ## Summary
 
-Solid first-pass app. Good structure, accessibility is genuinely well-done, and the test coverage for models/storage is decent. But there are **2 critical bugs** that would cause real user pain: recordings silently use the wrong family members list, and duration is never captured. Several other important issues below.
+The app is in decent shape for a first experiment. Architecture is clean, accessibility is thoughtful, and the service layer has reasonable test coverage. However, there are **3 critical bugs** that will cause incorrect behavior in production, plus several TestFlight blockers. The recording flow is largely untested at the UI/integration level.
 
 ---
 
 ## 🔴 Critical
 
-### 1. `RecordingView` uses a private `SettingsStore` — family members stale/wrong
+### 1. `settingsStore` in RecordingView and FreestyleRecordingView is not `@StateObject` — family members may load stale/empty
 
-**File:** `Views/Recording/RecordingView.swift`
+**File:** `Views/Recording/RecordingView.swift` ~line 22, `FreestyleRecordingView.swift` ~line 20
 
 ```swift
-private var settingsStore = SettingsStore()
+private var settingsStore = SettingsStore()  // plain var — not observed, inconsistent with app state
 ```
 
-This creates a **new, independent** `SettingsStore` instance — not the one passed via `@EnvironmentObject` from the app. The settings *are* reloaded from UserDefaults so persisted data shows up, but any in-session changes (e.g., user just added a family member during setup) won't be reflected. More importantly, it violates the single-source-of-truth pattern the rest of the app follows. If `SettingsStore` ever becomes more stateful, this will silently diverge.
-
-**Fix:** Change to `@EnvironmentObject var settingsStore: SettingsStore`. It's already in the environment from `GrandmasStoriesApp`.
+A plain `var` on a SwiftUI view struct is recreated on every render. The app injects `SettingsStore` via `@EnvironmentObject` at the app level, but both recording views ignore it and create their own independent instance. If a user updates family members, the RecordingView may read an out-of-sync copy. The correct fix is `@EnvironmentObject private var settingsStore: SettingsStore` (already wired up at app root).
 
 ---
 
-### 2. Recording duration is always 0
+### 2. `checkMeters()` is dead code — `silenceDetected` never fires
 
-**File:** `Views/Recording/RecordingView.swift`
-
-```swift
-savedRecording = Recording(
-    title: question ?? "Story",
-    ...
-    fileName: fileName
-)  // duration defaults to 0, never updated
-```
-
-The `Recording` is created when recording **starts** with `duration: 0`. After `stopRecording()`, the actual elapsed duration is never computed and written back. Every recording in storage has `duration = 0` — bad metadata, and will break any future UI showing duration.
-
-**Fix:** Track `startDate = Date()` when recording begins. After `stopRecording()`, set `savedRecording?.duration = Date().timeIntervalSince(startDate)`. Alternatively expose `recorder.currentTime` from `AudioRecorder` before stopping.
-
----
-
-## 🟡 Important
-
-### 3. `silenceDetected` is published but never set — silence detection is broken
-
-**File:** `Services/AudioRecorder.swift`
+**File:** `Services/AudioRecorder.swift` lines 64–68
 
 ```swift
 private func checkMeters() {
     guard let recorder else { return }
     recorder.updateMeters()
-    _ = recorder.averagePower(forChannel: 0)  // result discarded!
+    _ = recorder.averagePower(forChannel: 0)  // result discarded
 }
 ```
 
-The meter timer fires every 0.1s but the result is thrown away. `silenceDetected` is never updated. The feature is present in the API but completely inert.
-
-**Fix:** Compare the power reading against `silenceThreshold` and publish `silenceDetected = power < silenceThreshold`. Or remove the feature if deferred.
+The meter timer fires every 0.1s but discards the power reading. `silenceDetected` is never set to `true`. If anything reads this published property expecting silence detection to work, it's always wrong. Either implement it or remove the timer and dead property.
 
 ---
 
-### 4. AVAudioSession never deactivated after recording/playback
+### 3. `MessageComposer` loads audio file on main thread — UI freeze on share
 
-**File:** `Services/AudioRecorder.swift`
+**File:** `Views/Components/MessageComposer.swift` ~line 23
 
-`startRecording()` and `playRecording()` call `session.setActive(true)` but `stopRecording()` and the delegate callbacks never deactivate the session. This prevents other audio apps (Music, Podcasts) from resuming after the user finishes.
+```swift
+if let data = try? Data(contentsOf: url) {  // synchronous, blocking, main thread
+    vc.addAttachmentData(data, ...)
+}
+```
 
-**Fix:** Call `try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)` at the end of `stopRecording()` and in `audioRecorderDidFinishRecording` / `audioPlayerDidFinishPlaying`.
-
----
-
-### 5. WhatsApp `canOpenURL` always returns false — `LSApplicationQueriesSchemes` missing
-
-**File:** `GrandmasStories/Info.plist`, `Services/SharingService.swift`
-
-`canOpenURL("whatsapp://app")` requires `whatsapp` declared under `LSApplicationQueriesSchemes` in Info.plist (iOS 9+). It's not there. The check always returns `false`, so the "WhatsApp not installed" alert fires for everyone, even when WhatsApp is installed.
-
-Also: both branches of the `if/else` in `shareViaWhatsApp()` do the exact same thing — the only difference is the spurious alert. This should be cleaned up after fixing the plist.
-
-**Fix:** Add `LSApplicationQueriesSchemes` to Info.plist with `whatsapp`. Then differentiate the branches meaningfully.
+`makeUIViewController` is called on the main thread. `Data(contentsOf:)` is a blocking file read. A 5-minute recording can be 4–8 MB; on an older device this will freeze the UI for a visible moment. Use `addAttachmentURL(_:withAlternateFilename:)` or load data on a background queue before presenting.
 
 ---
 
-### 6. `fileSize` never populated on saved Recording
+## 🟡 Important
 
-`savedRecording.fileSize` is always `0`. `storage.fileSize(fileName:)` is available but never called after `stopRecording()`.
+### 4. `Recording.duration` is always 0
 
-**Fix:** After stopping, update `savedRecording?.fileSize = storage.fileSize(fileName: fileName)`.
+`AVAudioRecorder.currentTime` gives elapsed recording time. `stopRecording()` never captures it, so every saved Recording has `duration = 0`. Add `var recordingDuration: TimeInterval` to AudioRecorder, populate it on stop, use it when constructing the Recording struct.
 
----
+### 5. File rename collision in FreestyleRecordingView
 
-### 7. `iCloudBackupEnabled` does nothing
+If a user records two stories with the same name, `FileManager.moveItem` throws because the sanitized destination already exists. The recording is lost and a generic "Save Failed" alert appears. Add a UUID or timestamp suffix to the filename to prevent collisions.
 
-`AppSettings.iCloudBackupEnabled` is stored, tested, and presumably toggleable in the UI, but no code sets `URLResourceValues.isExcludedFromBackup` on audio files. The setting is a no-op.
+### 6. `iCloudBackupEnabled` is a ghost feature
 
-**Fix:** Wire it up in `StorageManager.saveAudioFile()` — after writing, apply `isExcludedFromBackup = !settings.iCloudBackupEnabled` to the file URL. Or remove the property to avoid misleading users.
+The flag is stored and surfaced in setup, but there is zero iCloud backup implementation. `Documents/Recordings/` is backed up by default by iOS regardless of this flag. Either implement it (`.isExcludedFromBackup`) or remove the flag before TestFlight — it misleads users.
 
----
+### 7. `AVAudioSession.requestRecordPermission()` deprecated in iOS 17
 
-## 🔵 Suggestions
+The deployment target IS iOS 17 but `PermissionManager` still calls the deprecated `AVAudioSession` API. Update to `AVAudioApplication.requestRecordPermission()`.
 
-### 8. `SetupView` in ContentView.swift is dead code
+### 8. Recording flow has no integration/UI tests
 
-`SetupView` (the simple "Get Started" button view) is defined but never used — `ContentView` routes to `SetupContainerView`. Delete it.
-
-### 9. `StorageManagerTests` writes to real Documents/Recordings
-
-`tempDir` is created in `setUpWithError()` but never injected into `StorageManager`. Tests write actual files to the device's Documents folder. If a test crashes mid-run, files leak. Consider adding a `baseDirectory` parameter to `StorageManager.init()` for testing.
-
-### 10. Missing `UIRequiredDeviceCapabilities` for microphone
-
-Apps requiring a microphone should declare `microphone` in `UIRequiredDeviceCapabilities` to prevent installation on incompatible devices.
-
-### 11. No Privacy Manifest (`PrivacyInfo.xcprivacy`)
-
-Required for App Store submission as of Spring 2024 for apps accessing sensitive APIs (microphone, contacts). Not present.
+Unit tests for `StorageManager` and models are solid. But the core journey (permission check → record → stop → share) has zero test coverage. Flag for the next sprint.
 
 ---
 
-## TestFlight Readiness
+## 🔵 TestFlight Readiness
 
-| Check | Status |
-|-------|--------|
-| `NSMicrophoneUsageDescription` | ✅ |
-| `NSContactsUsageDescription` | ✅ |
-| Bundle ID, version strings set | ✅ |
-| Portrait-only locked | ✅ |
-| Privacy Manifest (`PrivacyInfo.xcprivacy`) | ❌ Missing |
-| `LSApplicationQueriesSchemes` (whatsapp) | ❌ Missing |
-| `UIRequiredDeviceCapabilities` (microphone) | ❌ Missing |
-| Duration captured on recordings | ❌ Bug |
-| iCloudBackupEnabled wired up | ❌ Dead code |
+| Item | Status | Notes |
+|------|--------|-------|
+| `DEVELOPMENT_TEAM` | ❌ Empty | Must be set before archiving |
+| Privacy Manifest (`PrivacyInfo.xcprivacy`) | ❌ Missing | **Required by Apple since Apr 2024** for apps using UserDefaults, file system, contacts. Will be rejected without it. |
+| App Icon | ⚠️ Unverified | Confirm `AppIcon` asset set is complete |
+| Launch Screen assets | ⚠️ Risky | `Info.plist` references `LaunchBackground` color and `LaunchIcon` image — if missing from asset catalog, app crashes on launch |
+| Privacy Policy URL | ❌ Missing | Required for App Store listing |
+| Crash reporting | ❌ None | Consider adding at minimum before TestFlight |
 
-**Verdict:** Needs the privacy manifest and LSApplicationQueriesSchemes before App Store submission. The two critical bugs (duration = 0, dead `iCloudBackupEnabled`) should be fixed before TestFlight for a credible UX.
+### Minor
+- `HomeView` hardcodes `Color(red: 0.3, green: 0.65, blue: 0.4)` instead of using `AppColors` — should get a token.
+- `SetupView` struct in `ContentView.swift` is defined but never used (dead code).
 
 ---
 
-## What's Good
+## What's Working Well
 
-- **Accessibility is genuinely solid.** VoiceOver labels, hints, live regions, `accessibilityHidden` on decorative elements — done right throughout.
-- **Interruption handling** in `AudioRecorder` is thoughtful — phone calls stop recording gracefully.
-- **`StorageManager` is injected cleanly** for testing.
-- **Model/storage test coverage is real** — not coverage theater. `RecordingPersistenceTests` is thorough.
-- **Disk space check** before recording is a good UX touch.
-- **Setup flow** with progress indicator is clean.
+- **Accessibility is genuinely good**: VoiceOver labels, hints, `accessibilityLiveRegion`, hidden decorative elements — better than most indie apps.
+- **Interruption handling** (phone calls during recording) is implemented and exposed to the UI.
+- **StorageManager is properly injectable** for testing with custom UserDefaults/FileManager.
+- **Disk space check** before recording is a nice touch for this audience.
+- **Error handling present throughout** — nearly every throwing call has a user-facing alert.
