@@ -1,3 +1,5 @@
+Still a work in progress.
+
 # Grandma's Stories
 
 An iOS app for recording and sharing personal family stories. Designed to help grandparents and older family members capture their memories in a simple, accessible way — and send them straight to the family.
