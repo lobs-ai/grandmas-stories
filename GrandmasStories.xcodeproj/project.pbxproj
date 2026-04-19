@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,7 +59,7 @@
 		446BEBD463C5CF129CE671F4 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		5D507E7A425235EE3485FC3F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
 		620211F7057DBAB84C4D4508 /* RecordingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingTestView.swift; sourceTree = "<group>"; };
-		695747D53D93158320579858 /* GrandmasStories.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GrandmasStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		695747D53D93158320579858 /* GrandmasStories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GrandmasStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B2E4C9A963D5A6088BB48B /* FamilySharingSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySharingSetupView.swift; sourceTree = "<group>"; };
 		72AD7E22F12F11B04C9D0FCF /* SharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingService.swift; sourceTree = "<group>"; };
 		7E3E2D5EE6024296CF11F6A2 /* FamilySharingSetupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySharingSetupTests.swift; sourceTree = "<group>"; };
@@ -75,6 +75,7 @@
 		D9A0FAB0F75CB89C3C618042 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		DF7E2A0193A30F56AB6488CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E2EC0146D459A0E686A4DD47 /* MessageComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
+		AABB11223344556677889900 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB46A06BEA25BF65DB382840 /* StorageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManagerTests.swift; sourceTree = "<group>"; };
 		ED15CE6385C24C52C309DB14 /* QuestionBankTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionBankTests.swift; sourceTree = "<group>"; };
 		FE40A47D26B0A21FB4264303 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				4378D7380BCF25B5527E5515 /* GrandmasStoriesApp.swift */,
+				AABB11223344556677889900 /* Assets.xcassets */,
 				DF7E2A0193A30F56AB6488CD /* Info.plist */,
 				9F5807E2866AADD1D86BF971 /* Data */,
 				C7F50B5265A428412DE4C86B /* Models */,
@@ -201,6 +203,10 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXBuildFile section */
+		AABB11223344556677889901 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABB11223344556677889900 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXNativeTarget section */
 		0C92CD638C06D584A1416EA7 /* GrandmasStoriesTests */ = {
 			isa = PBXNativeTarget;
@@ -225,6 +231,7 @@
 			buildConfigurationList = 014F7D7BA139A8EB1A7CA78B /* Build configuration list for PBXNativeTarget "GrandmasStories" */;
 			buildPhases = (
 				F615AD0992CBA84C55C7E0BA /* Sources */,
+				AABB11223344556677889902 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -247,7 +254,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2C4C2895A035891A0D27DC96 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -262,7 +268,6 @@
 			);
 			mainGroup = B387B68A9C64F53C2E8B076C;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -283,6 +288,14 @@
 				6008474B44B9EAD96132F046 /* QuestionBankTests.swift in Sources */,
 				3889DB986C9B94F4D0D88A7B /* SharingServiceTests.swift in Sources */,
 				E6CED468FE4A5A281D270224 /* StorageManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AABB11223344556677889902 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AABB11223344556677889901 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,7 +496,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3RBX83B85P;
 				INFOPLIST_FILE = GrandmasStories/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,7 +514,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3RBX83B85P;
 				INFOPLIST_FILE = GrandmasStories/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
